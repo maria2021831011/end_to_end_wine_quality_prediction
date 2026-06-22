@@ -2,7 +2,9 @@
 
 This is an end-to-end Machine Learning project that predicts wine quality using a trained ML model and is deployed using Docker, Azure Container Registry (ACR), and Azure Web App.
 
-https://mlproj-wine-app-2026.azurewebsites.net
+## 🌐 Live Demo
+
+https://mlproj-wine-app-2026-arh4azbfh2awdgf0.centralindia-01.azurewebsites.net
 
 ---
 
