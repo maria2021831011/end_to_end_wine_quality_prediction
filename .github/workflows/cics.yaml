@@ -1,0 +1,49 @@
+name: Azure CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to ACR
+        run: az acr login --name mariacnnacr2026
+
+      - name: Build Docker image
+        run: |
+          docker build -t mariacnnacr2026.azurecr.io/mlproj:latest .
+
+      - name: Push Docker image
+        run: |
+          docker push mariacnnacr2026.azurecr.io/mlproj:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Restart Web App
+        run: |
+          az webapp restart \
+            --name mlproj-wine-app-2026 \
+            --resource-group cnn-rg
